@@ -22,14 +22,15 @@ For this assignment we have to create an ML pipeline. We should use python as mu
 	- I added this trigger in the Google Cloud Console. (Click [this link](https://console.cloud.google.com/products), search for 'Cloud Build', go to the 'Triggers' tab)
 - The pipeline will
 	- Dockerize all components
-	- Spin up the trainer component, which will create and upload the model.
-		- The model format should be [pickle](https://docs.python.org/3/library/pickle.html).
-		- The storage that we use is Google Cloud Storage.
-		- Uploading can quite simply be done using the `gcloud` Python package.
+		- Upload the docker images to the GCP artifact registry
+	- Spin up the trainer docker image, which will create and upload the model.
 
 ### Trainer
 - Uses the `scikit-learn` Python package to create a simple linear regression model on [some simple data](./trainer/data/salary.csv).
 - I have created this component already, but it is UNTESTED still.
+- The model storage format should be [pickle](https://docs.python.org/3/library/pickle.html).
+- The storage that we use is Google Cloud Storage.
+- Uploading can quite simply be done using the `gcloud` Python package.
 
 ### Web app
 - Uses Flask
