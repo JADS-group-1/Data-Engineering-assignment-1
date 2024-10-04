@@ -1,36 +1,37 @@
 # Data Engineering assignment 1
 For this assignment we have to create an ML pipeline. We should use python as much as possible, because that is easiest and then we can follow [the example](https://github.com/IndikaKuma/DE2024/tree/main/lab2). 
 ## Components
-- Trainer
-	- Contains the model training code, and contains the training data
-	- When done, it uploads the trained model to a GCP cloud storage
 - Web app
 	- Contains both the backend and the frontend. 
 		- (This is bad practice, but it is easiest so this is probably best for this simple assignment.)
 	- Will serve up the frontend using templates, as done in the example.
 	- Will contain a single endpoint for prediction. 
 	- This service downloads the prediction model from the GCP cloud storage
-- Pipeline
-	- Spins up the trainer when the repository updates.
+- Pipelines
+	- Vertex AI
+		- Creates the model and uploads it.
+	- CI/CD
+		- This pipeline dockerizes the web app and uploads it to the GCP container registry
 
 ## Details
 1 repository, each component has its own folder.
 
-### Pipeline
-- The pipeline is defined in `pipeline/cloudbuild.yaml`. This pipeline is a Google Cloud Build pipeline, and its executed on the Google servers.
+### Pipelines
+- 2 pipelines: The Vertex AI pipeline and the normal CI/CD pipeline. Both are Google pipelines and therefore run on the Google servers
 - Every time the *main* branch updates, the pipeline is triggered.
 	- I added this trigger in the Google Cloud Console. (Click [this link](https://console.cloud.google.com/products), search for 'Cloud Build', go to the 'Triggers' tab)
-- The pipeline will
-	- Dockerize all components
-		- Upload the docker images to the GCP artifact registry
-	- Spin up the trainer docker image, which will create and upload the model.
-
-### Trainer
-- Uses the `scikit-learn` Python package to create a simple linear regression model on [some simple data](./trainer/data/salary.csv).
-- I have created this component already, but it is UNTESTED still.
-- The model storage format should be [pickle](https://docs.python.org/3/library/pickle.html).
-- The storage that we use is Google Cloud Storage.
-- Uploading can quite simply be done using the `gcloud` Python package.
+- The Vertex AI pipeline is defined in `pipeline/vertex_ai`
+	- This creates and uploads the model.
+	- Done using [Kubeflow Pipelines DSL](https://cloud.google.com/vertex-ai/docs/pipelines/build-pipeline) 
+	- Create components to do the processing
+		- Component for data preparation
+		- Component for model training
+	- The pipeline and its components are built using Python with the KubeFlow library
+		- It's compiled to a YAML file.
+		- The YAML can be uploaded in the GCP console.
+- The CICD pipeline is defined in `pipeline/cloudbuild.yaml`.
+	- Will dockerize the web app and upload the image to the GCP container registry
+	- Will trigger the Vertex AI Pipeline.
 
 ### Web app
 - Uses Flask
