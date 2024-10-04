@@ -32,6 +32,7 @@ For this assignment we have to create an ML pipeline. We should use python as mu
 - The CICD pipeline is defined in `pipeline/cloudbuild.yaml`.
 	- Will dockerize the web app and upload the image to the GCP container registry
 	- Will trigger the Vertex AI Pipeline.
+	- Afterwards, it will deploy the web-app Docker image to a Google Cloud Run instance
 
 ### Web app
 - Uses Flask
