@@ -40,12 +40,12 @@ For this assignment we have to create an ML pipeline. We should use python as mu
 - On startup, it downloads the model from the Google Cloud Storage and loads the model into memory.
 
 ## Method
-The general division of tasks is as follows:
-Web app -> Eugen
-Vertex AI pipeline -> Mathijs
+The general division of tasks is as follows:\
+Web app -> Eugen\
+Vertex AI pipeline -> Mathijs\
 CI/CD pipeline -> Yan
 
-This is not set in stone, and we should help each other with each other's tasks.
+This is not set in stone, and we should help each other with each other's tasks.\
 We will work with merge requests, to keep the overview. Reviewing should be assigned to Mathijs. This means everyone should work in their own branch.
 ## Running it
 The `trainer` and `web-app` components contain Dockerfile's to containerize the application. Both require additional environment variables to run, which should be specified in the `docker run` command. To run the applications locally, you need to have the environment variables set. How to do this, you can find online.
