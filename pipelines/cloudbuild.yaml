@@ -1,0 +1,39 @@
+steps:
+    # flask webapp
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/webapp:$COMMIT_SHA', '.'] # verander naam
+    dir: 'webapp' # verander directory
+
+    # push docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/webapp:$COMMIT_SHA'] # verander naam
+
+    # deploy docker image
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - 'webapp-service' # naam van cloud run service waar docker image gedeployed wordt
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/webapp:$COMMIT_SHA' # naam
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - '$_REGION'
+      - '--allow-unauthenticated'
+    # download the model
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'ai'
+      - 'pipelines'
+      - 'run'
+      - '--pipeline-name'
+      - 'vertex-ai' # naam van AI pipeline
+      - '--region'
+      - '$_REGION'
+      - '--parameter-values'
+      - 'model_name=new-model,project_id=$PROJECT_ID'
+
