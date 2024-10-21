@@ -1,0 +1,7 @@
+google-cloud-pipeline-components>2
+kfp>2
+google-cloud-aiplatform
+pandas
+scikit-learn
+numpy
+oauth2client 
